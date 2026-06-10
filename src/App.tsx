@@ -1,18 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Dashboard } from './components/Dashboard.tsx';
 import { WelcomeScreen } from './components/WelcomeScreen.tsx';
 import { useTasks } from './hooks/useTasks.ts';
 import { useTheme } from './hooks/useTheme.ts';
+import { useAuth } from './hooks/useAuth.ts';
 import { storage } from './utils/storage.ts';
 import { timeHelper } from './utils/timeHelper.ts';
-
-type View = 'welcome' | 'home';
 
 function App() {
   const { tasks, routines, addTask, updateTask, deleteTask, addRoutine, updateRoutine, deleteRoutine } =
     useTasks();
   const { theme, toggleTheme } = useTheme();
-  const [view, setView] = useState<View>('welcome');
+  const auth = useAuth();
 
   useEffect(() => {
     const storedTasks = storage.getTasks();
@@ -109,14 +108,15 @@ function App() {
     window.location.reload();
   };
 
-  if (view === 'welcome') {
-    return (
-      <WelcomeScreen
-        theme={theme}
-        onToggleTheme={toggleTheme}
-        onEnter={() => setView('home')}
-      />
-    );
+  // Esperamos a saber si hay sesión para no parpadear entre pantallas
+  if (!auth.ready) {
+    return <div className="av-boot" />;
+  }
+
+  // Sin sesión: pantalla de bienvenida con acceso integrado.
+  // Al autenticarse, auth.user cambia y entramos a la app.
+  if (!auth.user) {
+    return <WelcomeScreen theme={theme} onToggleTheme={toggleTheme} auth={auth} />;
   }
 
   return (

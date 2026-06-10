@@ -18,7 +18,13 @@ export type IconName =
   | 'sun'
   | 'signal'
   | 'wifi'
-  | 'battery';
+  | 'battery'
+  | 'chevron-left'
+  | 'mail'
+  | 'lock'
+  | 'user'
+  | 'eye'
+  | 'eye-off';
 
 interface IconProps {
   name: IconName;
@@ -91,6 +97,39 @@ const paths: Record<IconName, React.ReactNode> = {
       <rect x="3" y="8" width="16" height="8" rx="2" />
       <path d="M21 11v2" />
       <rect x="5" y="10" width="9" height="4" rx="1" fill="currentColor" stroke="none" />
+    </>
+  ),
+  'chevron-left': <path d="M15 6l-6 6 6 6" />,
+  mail: (
+    <>
+      <rect x="3" y="5" width="18" height="14" rx="2.5" />
+      <path d="M4 7.5l8 5.5 8-5.5" />
+    </>
+  ),
+  lock: (
+    <>
+      <rect x="5" y="11" width="14" height="9" rx="2.5" />
+      <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+    </>
+  ),
+  user: (
+    <>
+      <circle cx="12" cy="8" r="3.5" />
+      <path d="M5.5 19.5a6.5 6.5 0 0 1 13 0" />
+    </>
+  ),
+  eye: (
+    <>
+      <path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z" />
+      <circle cx="12" cy="12" r="3" />
+    </>
+  ),
+  'eye-off': (
+    <>
+      <path d="M4 4l16 16" />
+      <path d="M6.7 6.8C4 8.5 2.5 12 2.5 12s3.5 6.5 9.5 6.5c1.5 0 2.9-.4 4.1-1" />
+      <path d="M9.9 9.7A3 3 0 0 0 12 15a3 3 0 0 0 2.1-.9" />
+      <path d="M14.5 5.9A9.3 9.3 0 0 0 12 5.5" />
     </>
   ),
 };

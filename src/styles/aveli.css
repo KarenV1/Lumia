@@ -48,6 +48,9 @@
 .av-home > *:nth-child(6) {
   animation-delay: 390ms;
 }
+.av-home > *:nth-child(7) {
+  animation-delay: 460ms;
+}
 
 @media (prefers-reduced-motion: reduce) {
   .av-home > * {
@@ -140,7 +143,7 @@
    Header
    ============================================================ */
 .av-header {
-  padding-top: 56px;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 48px);
 }
 
 .av-statusbar {
@@ -656,20 +659,28 @@
   background: var(--welcome-bg);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   color: var(--text-primary);
 }
 
+/* Pantalla de arranque (mientras se resuelve la sesión) */
+.av-boot {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--welcome-bg);
+}
+
 /* Halo cálido de amanecer en la parte superior (la "luz" de Lumia).
-   Se mantiene por encima del logo para no revelar el fondo del PNG. */
+   Usa transform (no top negativo) para no generar scroll. */
 .av-welcome::before {
   content: '';
   position: absolute;
-  top: -8%;
+  top: 0;
   left: 50%;
   width: 360px;
   height: 360px;
-  transform: translateX(-50%);
+  transform: translate(-50%, -42%);
   background: radial-gradient(circle, var(--brand-glow) 0%, transparent 60%);
   filter: blur(14px);
   opacity: 0.8;
@@ -680,12 +691,20 @@
 @keyframes avGlow {
   from {
     opacity: 0.55;
-    transform: translateX(-50%) scale(0.95);
+    transform: translate(-50%, -42%) scale(0.95);
   }
   to {
     opacity: 0.9;
-    transform: translateX(-50%) scale(1.05);
+    transform: translate(-50%, -42%) scale(1.05);
   }
+}
+
+/* Contenedor del acceso dentro de la bienvenida: ancho elegante y centrado */
+.av-welcome-auth {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  animation: avRise 480ms var(--ease) both;
 }
 
 .av-welcome-top {
@@ -713,6 +732,20 @@
   width: min(76vw, 320px);
   height: auto;
   animation: avRise 720ms var(--ease) both;
+  /* Desvanece los bordes del PNG para que el fondo horneado se funda con la
+     luz del fondo (sin línea rectangular). El contenido queda intacto. */
+  -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 10%,
+      #000 90%,
+      transparent 100%
+    ),
+    linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to right, transparent 0, #000 10%, #000 90%, transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%);
+  mask-composite: intersect;
 }
 
 .av-welcome-tagline {
@@ -738,35 +771,422 @@
   animation: avRise 720ms var(--ease) 240ms both;
 }
 
-.av-cta {
+.av-welcome-hint {
+  font-size: 13px;
+  color: var(--text-disabled);
+  margin: 0;
+}
+
+/* ============================================================
+   Botones (PrimaryButton)
+   ============================================================ */
+.av-btn-primary,
+.av-btn-ghost {
   appearance: none;
-  border: none;
   cursor: pointer;
   font-family: var(--font-ui);
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.3px;
-  color: #4a3b38;
-  background: var(--rosa);
-  padding: 17px 0;
-  width: 100%;
-  max-width: 360px;
+  padding: 16px 28px;
   border-radius: var(--r-btn);
-  box-shadow: 0 10px 26px rgba(245, 213, 203, 0.35);
-  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 54px;
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
+    background var(--dur) var(--ease), opacity var(--dur) var(--ease);
 }
 
-.av-cta:hover {
+.av-btn-primary {
+  border: none;
+  color: #4a3b38;
+  background: var(--rosa);
+  box-shadow: 0 10px 26px rgba(245, 213, 203, 0.35);
+}
+
+.av-btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 14px 32px rgba(245, 213, 203, 0.45);
 }
 
-.av-cta:active {
+.av-btn-primary:active {
   transform: scale(0.98);
 }
 
-.av-welcome-hint {
-  font-size: 13px;
+.av-btn-ghost {
+  color: var(--text-primary);
+  background: var(--glass-bg-bar);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+
+.av-btn-ghost:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.av-btn-ghost:active {
+  transform: scale(0.98);
+}
+
+.av-btn-primary[disabled],
+.av-btn-ghost[disabled] {
+  cursor: default;
+  opacity: 0.65;
+  transform: none;
+  box-shadow: none;
+}
+
+.av-btn-primary--block,
+.av-btn-ghost--block {
+  width: 100%;
+  max-width: 360px;
+}
+
+.av-spinner {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(74, 59, 56, 0.35);
+  border-top-color: #4a3b38;
+  animation: avSpin 0.7s linear infinite;
+}
+
+.av-btn-ghost .av-spinner {
+  border-color: rgba(255, 255, 255, 0.3);
+  border-top-color: var(--text-primary);
+}
+
+@keyframes avSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================================
+   Inputs (GlassInput / InputField)
+   ============================================================ */
+.av-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.av-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.av-input {
+  width: 100%;
+  height: 56px;
+  border-radius: var(--r-input);
+  background: var(--glass-bg-bar);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  padding: 0 18px;
+  outline: none;
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
+    background var(--dur) var(--ease);
+}
+
+.av-input::placeholder {
   color: var(--text-disabled);
+}
+
+.av-input:focus {
+  border-color: rgba(245, 213, 203, 0.75);
+  box-shadow: 0 0 0 3px rgba(245, 213, 203, 0.18);
+}
+
+.av-input--has-icon {
+  padding-left: 48px;
+}
+
+.av-input--has-trail {
+  padding-right: 48px;
+}
+
+.av-input-icon {
+  position: absolute;
+  left: 17px;
+  display: flex;
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.av-input-trail {
+  position: absolute;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: 50%;
+  transition: color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+
+.av-input-trail:hover {
+  color: var(--text-primary);
+  background: var(--chip-bg);
+}
+
+.av-input-wrap--error .av-input {
+  border-color: rgba(207, 143, 121, 0.7);
+}
+
+.av-field-error {
+  font-size: 12px;
+  color: #cf8f79;
+  padding-left: 6px;
+}
+
+/* ============================================================
+   AuthContainer
+   ============================================================ */
+.av-auth {
+  padding: 26px;
+}
+
+.av-auth-stage {
+  overflow: hidden;
+  transition: height 300ms var(--ease);
+}
+
+.av-auth-inner {
+  animation: avAuthIn 300ms var(--ease);
+}
+
+@keyframes avAuthIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.99);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+.av-auth-title {
+  font-family: var(--font-display);
+  font-size: var(--t-h3);
+  font-weight: 500;
+  text-align: center;
+  margin: 0 0 6px;
+  line-height: 1.1;
+}
+
+.av-auth-sub {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0 0 22px;
+}
+
+.av-auth-choices {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.av-auth-choices .av-btn-primary--block,
+.av-auth-choices .av-btn-ghost--block {
+  max-width: none;
+}
+
+/* Divider para el espacio social preparado */
+.av-auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 22px 0 16px;
+  font-size: 12px;
+  color: var(--text-disabled);
+}
+
+.av-auth-divider::before,
+.av-auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--hairline);
+}
+
+.av-auth-social {
+  display: flex;
+  gap: 10px;
+}
+
+.av-social {
+  flex: 1;
+  height: 44px;
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg-bar);
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* Cabecera de los formularios */
+.av-auth-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.av-auth-back {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg-bar);
+  color: var(--text-primary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+
+.av-auth-back:hover {
+  transform: translateX(-2px);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.av-auth-headtitle {
+  font-family: var(--font-display);
+  font-size: var(--t-h3);
+  font-weight: 500;
   margin: 0;
+}
+
+.av-auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.av-auth-form .av-btn-primary--block {
+  max-width: none;
+  margin-top: 4px;
+}
+
+.av-auth-link,
+.av-auth-switch {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  text-align: center;
+  color: var(--text-secondary);
+  transition: color var(--dur) var(--ease);
+}
+
+.av-auth-link {
+  font-size: 13px;
+}
+
+.av-auth-switch {
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+.av-auth-switch strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.av-auth-link:hover,
+.av-auth-switch:hover {
+  color: var(--text-primary);
+}
+
+.av-auth-alert {
+  font-size: 13px;
+  color: #cf8f79;
+  text-align: center;
+  margin: 2px 0 0;
+}
+
+.av-auth-notice {
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin: 14px 0 0;
+}
+
+/* ============================================================
+   Responsive — prioridad teléfonos y pantallas medianas
+   ============================================================ */
+
+/* Teléfonos pequeños: más aire útil, menos padding rígido */
+@media (max-width: 380px) {
+  .av-home {
+    padding-left: 18px;
+    padding-right: 18px;
+    gap: 22px;
+  }
+
+  .av-card {
+    padding: 24px;
+  }
+
+  .av-auth {
+    padding: 22px;
+  }
+
+  .av-quickadd {
+    padding: 0 12px;
+    gap: 12px;
+  }
+
+  .av-tl-time,
+  .av-routine-time {
+    font-size: 12px;
+  }
+
+  .av-weather-temp {
+    font-size: 24px;
+  }
+
+  .av-welcome-foot,
+  .av-welcome-body {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+}
+
+/* Evita que el saludo desborde en anchos muy estrechos */
+.av-greeting {
+  overflow-wrap: break-word;
+}
+
+/* Pantallas medianas y mayores: la columna se mantiene centrada y uniforme,
+   con un punto extra de presencia sin perder la estética de teléfono. */
+@media (min-width: 720px) {
+  .av-home {
+    max-width: 520px;
+  }
 }

@@ -1,33 +1,57 @@
+import { useState } from 'react';
 import { Theme } from '../hooks/useTheme.ts';
+import { useAuth } from '../hooks/useAuth.ts';
 import { BrandLogo } from './ui/BrandLogo.tsx';
 import { ThemeToggle } from './ui/ThemeToggle.tsx';
+import { PrimaryButton } from './ui/PrimaryButton.tsx';
+import { AuthContainer } from './auth/AuthContainer.tsx';
 
 interface WelcomeScreenProps {
   theme: Theme;
   onToggleTheme: () => void;
-  onEnter: () => void;
+  auth: ReturnType<typeof useAuth>;
 }
 
 /**
- * Pantalla principal de marca (cover) de Lumia.
- * Mismo lenguaje visual: calma, luz cálida, glassmorphism. Soporta light/dark.
+ * Pantalla principal de marca (cover) de Lumia. Muestra el logo y, al pulsar
+ * "Comenzar", despliega la tarjeta de acceso (login/registro) sobre la misma
+ * pantalla. Al autenticarse, el padre (App) cambia a la app.
  */
-export const WelcomeScreen = ({ theme, onToggleTheme, onEnter }: WelcomeScreenProps) => (
-  <div className="av-welcome">
-    <div className="av-welcome-top">
-      <ThemeToggle theme={theme} onToggle={onToggleTheme} />
-    </div>
+export const WelcomeScreen = ({ theme, onToggleTheme, auth }: WelcomeScreenProps) => {
+  const [showAuth, setShowAuth] = useState(false);
 
-    <div className="av-welcome-body">
-      <BrandLogo theme={theme} variant="imagotipo" className="av-welcome-logo" />
-      <p className="av-welcome-tagline">Tu día, en calma.</p>
-    </div>
+  return (
+    <div className={`av-welcome${showAuth ? ' av-welcome--auth' : ''}`}>
+      <div className="av-welcome-top">
+        <ThemeToggle theme={theme} onToggle={onToggleTheme} />
+      </div>
 
-    <div className="av-welcome-foot">
-      <button type="button" className="av-cta" onClick={onEnter}>
-        Comenzar
-      </button>
-      <p className="av-welcome-hint">Organiza tu tiempo con claridad</p>
+      <div className="av-welcome-body">
+        <BrandLogo theme={theme} variant="imagotipo" className="av-welcome-logo" />
+        {!showAuth && <p className="av-welcome-tagline">Tu día, en calma.</p>}
+      </div>
+
+      <div className="av-welcome-foot">
+        {showAuth ? (
+          <div className="av-welcome-auth">
+            <AuthContainer
+              loading={auth.loading}
+              error={auth.error}
+              onSignIn={auth.signIn}
+              onSignUp={auth.signUp}
+              onForgot={auth.resetPassword}
+              onClearError={auth.clearError}
+            />
+          </div>
+        ) : (
+          <>
+            <PrimaryButton block onClick={() => setShowAuth(true)}>
+              Comenzar
+            </PrimaryButton>
+            <p className="av-welcome-hint">Organiza tu tiempo con claridad</p>
+          </>
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
+};

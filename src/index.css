@@ -33,9 +33,9 @@
   --gris: #d8d8d8;
 
   /* Radios */
-  --r-input: 28px;
-  --r-card: 32px;
-  --r-btn: 24px;
+  --r-input: 24px;
+  --r-card: 22px;
+  --r-btn: 20px;
 
   /* Sombra */
   --shadow-soft: 0 12px 30px rgba(0, 0, 0, 0.1);
@@ -46,11 +46,11 @@
   --s-3: 24px;
   --s-4: 32px;
 
-  /* Escala tipográfica */
-  --t-hero: 68px;
+  /* Escala tipográfica (hero fluido para teléfonos) */
+  --t-hero: clamp(50px, 13.5vw, 68px);
   --t-h1: 44px;
   --t-h2: 32px;
-  --t-h3: 24px;
+  --t-h3: clamp(22px, 5.5vw, 24px);
   --t-body: 18px;
   --t-caption: 14px;
   --t-small: 12px;
