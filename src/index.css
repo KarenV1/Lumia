@@ -1,0 +1,556 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   AVELI DESIGN SYSTEM · Tokens (única fuente de verdad)
+   Ref: design-system.md
+   ============================================================ */
+:root {
+  /* Tipografía */
+  --font-display: 'Cormorant Garamond', 'Canela', Georgia, 'Times New Roman', serif;
+  --font-ui: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui,
+    'Segoe UI', sans-serif;
+
+  /* Texto */
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.72);
+  --text-disabled: rgba(255, 255, 255, 0.45);
+
+  /* Glass */
+  --glass-bg: rgba(80, 80, 80, 0.18);
+  --glass-bg-bar: rgba(70, 70, 70, 0.18);
+  --glass-bg-dark: rgba(38, 36, 40, 0.34);
+  --glass-border: rgba(255, 255, 255, 0.16);
+  --glass-blur: 35px;
+
+  /* Acentos pastel */
+  --rosa: #f5d5cb;
+  --lavanda: #dccfe9;
+  --azul: #c7e4ef;
+  --verde: #c8d6c4;
+  --beige: #e8d6bf;
+  --gris: #d8d8d8;
+
+  /* Radios */
+  --r-input: 28px;
+  --r-card: 32px;
+  --r-btn: 24px;
+
+  /* Sombra */
+  --shadow-soft: 0 12px 30px rgba(0, 0, 0, 0.1);
+
+  /* Espaciado (base 8) */
+  --s-1: 8px;
+  --s-2: 16px;
+  --s-3: 24px;
+  --s-4: 32px;
+
+  /* Escala tipográfica */
+  --t-hero: 68px;
+  --t-h1: 44px;
+  --t-h2: 32px;
+  --t-h3: 24px;
+  --t-body: 18px;
+  --t-caption: 14px;
+  --t-small: 12px;
+
+  /* Movimiento */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur: 300ms;
+
+  /* Tema (valores por defecto = DARK) */
+  --hairline: rgba(255, 255, 255, 0.1);
+  --track-bg: rgba(255, 255, 255, 0.12);
+  --chip-bg: rgba(255, 255, 255, 0.12);
+  --overlay-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.22));
+  --bg-brightness: 1.05;
+
+  /* Marca (fondo plano = color horneado del logo, sin costuras) */
+  --brand-glow: rgba(245, 213, 203, 0.5);
+  --welcome-bg: #0d0d0e;
+}
+
+/* ============================================================
+   Tema claro — sobrescribe solo lo necesario (todo es token)
+   ============================================================ */
+[data-theme='light'] {
+  --text-primary: #2c2925;
+  --text-secondary: rgba(44, 41, 37, 0.66);
+  --text-disabled: rgba(44, 41, 37, 0.42);
+
+  --glass-bg: rgba(255, 255, 255, 0.42);
+  --glass-bg-bar: rgba(255, 255, 255, 0.38);
+  --glass-bg-dark: rgba(245, 213, 203, 0.42);
+  --glass-border: rgba(255, 255, 255, 0.7);
+
+  --shadow-soft: 0 12px 30px rgba(60, 40, 30, 0.12);
+
+  --hairline: rgba(45, 41, 37, 0.12);
+  --track-bg: rgba(45, 41, 37, 0.1);
+  --chip-bg: rgba(45, 41, 37, 0.08);
+  --overlay-gradient: linear-gradient(
+    180deg,
+    rgba(255, 251, 246, 0.24),
+    rgba(255, 251, 246, 0.08)
+  );
+  --bg-brightness: 1.12;
+
+  --brand-glow: rgba(245, 213, 203, 0.55);
+  --welcome-bg: #faf7f4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-ui);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+  transition: color var(--dur) var(--ease);
+}
+
+/* ============================================================
+   Capas de fondo
+   Fotografía luminosa, ligeramente desenfocada + overlay suave
+   ============================================================ */
+.bg-container {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.bg-base {
+  position: absolute;
+  inset: -4%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(2px) brightness(var(--bg-brightness)) saturate(1.03);
+  transform: scale(1.06);
+  z-index: 0;
+}
+
+/* Overlay temable (dark/light) para legibilidad */
+.bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--overlay-gradient);
+  z-index: 1;
+}
+
+.content-wrapper {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================================
+   Calendar Overlay (cápsula + expandido) — interacción existente
+   ============================================================ */
+.calendar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fadeInOverlay 0.4s var(--ease);
+  padding: 20px;
+}
+
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.calendar-capsule-floating {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  padding: 48px 40px;
+  border-radius: 96px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-soft), inset 0 2px 4px rgba(255, 255, 255, 0.18);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  overflow: hidden;
+  transition: transform var(--dur) var(--ease);
+  animation: popInCapsule 0.5s var(--ease);
+  color: var(--text-primary);
+}
+
+@keyframes popInCapsule {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.calendar-capsule-floating::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+}
+
+.calendar-expanded-floating {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  max-height: 82vh;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-card);
+  padding: 32px 24px;
+  box-shadow: var(--shadow-soft);
+  overflow-y: auto;
+  animation: expandCapsule 0.45s var(--ease);
+  color: var(--text-primary);
+}
+
+@keyframes expandCapsule {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.capsule-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  color: var(--text-primary);
+  position: relative;
+  z-index: 2;
+}
+
+.capsule-month {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+  opacity: 0.9;
+}
+
+.capsule-year {
+  font-size: 15px;
+  opacity: 0.7;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+.capsule-day {
+  font-family: var(--font-display);
+  font-size: 72px;
+  font-weight: 300;
+  line-height: 1;
+  margin: 10px 0;
+}
+
+.capsule-dayname {
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  opacity: 0.75;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.capsule-badge {
+  font-size: 13px;
+  background: rgba(245, 213, 203, 0.22);
+  color: var(--text-primary);
+  padding: 6px 14px;
+  border-radius: 16px;
+  margin-bottom: 12px;
+  font-weight: 500;
+  border: 1px solid rgba(245, 213, 203, 0.4);
+}
+
+.capsule-cta {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.85;
+  margin-top: 16px;
+  letter-spacing: 0.5px;
+}
+
+.capsule-shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.2), transparent);
+  border-radius: 96px;
+  pointer-events: none;
+}
+
+.capsule-expanded-header,
+.calendar-expanded-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.expanded-title {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 400;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+.expanded-close {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.2s var(--ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.expanded-close:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.calendar-nav {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.nav-btn,
+.nav-btn-today {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 14px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  font-family: var(--font-ui);
+}
+
+.nav-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+}
+
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.nav-btn-today {
+  background: rgba(245, 213, 203, 0.28);
+  border: 1px solid rgba(245, 213, 203, 0.45);
+  color: var(--text-primary);
+}
+
+.nav-btn-today:hover {
+  background: rgba(245, 213, 203, 0.38);
+}
+
+.calendar-expanded-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.calendar-grid-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.weekday-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.weekday-label {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0.6;
+  letter-spacing: 1px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s var(--ease);
+}
+
+.calendar-day:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.calendar-day.today {
+  background: rgba(245, 213, 203, 0.25);
+  border-color: rgba(245, 213, 203, 0.45);
+}
+
+.calendar-day.selected {
+  background: rgba(245, 213, 203, 0.45);
+  border-color: rgba(245, 213, 203, 0.7);
+  font-weight: 600;
+}
+
+.day-number {
+  font-size: 14px;
+}
+
+.day-indicator {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  background: rgba(245, 213, 203, 0.85);
+  color: #3a2c28;
+  font-size: 9px;
+  font-weight: 700;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selected-day-agenda {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+}
+
+.agenda-header {
+  margin-bottom: 16px;
+}
+
+.agenda-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 32px 16px;
+  opacity: 0.6;
+}
+
+.agenda-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.agenda-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 14px;
+  border-left: 3px solid rgba(245, 213, 203, 0.55);
+}
+
+.agenda-item.routine-item {
+  border-left-color: rgba(220, 207, 233, 0.6);
+}
+
+.agenda-time {
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 50px;
+  opacity: 0.85;
+}
+
+.agenda-content {
+  flex: 1;
+}
+
+.agenda-name {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.agenda-meta {
+  font-size: 12px;
+  opacity: 0.62;
+  margin: 4px 0 0;
+}
+
+/* ============ Responsive ============ */
+@media (max-width: 768px) {
+  .bg-base {
+    background-attachment: scroll;
+  }
+}

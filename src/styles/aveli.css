@@ -1,0 +1,772 @@
+/* ============================================================
+   AVELI · Home components
+   Todo deriva de los tokens de :root (design-system.md)
+   ============================================================ */
+
+.av-home {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 var(--s-3) calc(var(--s-3) + 72px);
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+/* Entrada en cascada: fade + slide up + blur */
+@keyframes avRise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.av-home > * {
+  animation: avRise 560ms var(--ease) both;
+}
+.av-home > *:nth-child(1) {
+  animation-delay: 40ms;
+}
+.av-home > *:nth-child(2) {
+  animation-delay: 110ms;
+}
+.av-home > *:nth-child(3) {
+  animation-delay: 180ms;
+}
+.av-home > *:nth-child(4) {
+  animation-delay: 250ms;
+}
+.av-home > *:nth-child(5) {
+  animation-delay: 320ms;
+}
+.av-home > *:nth-child(6) {
+  animation-delay: 390ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .av-home > * {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   GlassCard
+   ============================================================ */
+.av-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-card);
+  box-shadow: var(--shadow-soft);
+  padding: var(--s-4);
+  color: var(--text-primary);
+}
+
+.av-card--dark {
+  background: var(--glass-bg-dark);
+}
+
+/* ============================================================
+   SectionHeader
+   ============================================================ */
+.av-sec {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.av-sec-left {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.av-sec-title {
+  font-family: var(--font-display);
+  font-size: var(--t-h3);
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  margin: 0;
+  line-height: 1;
+}
+
+.av-sec-count {
+  min-width: 24px;
+  height: 24px;
+  padding: 0 7px;
+  border-radius: 12px;
+  background: var(--chip-bg);
+  border: 1px solid var(--glass-border);
+  font-size: var(--t-small);
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.av-sec-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+  font-size: var(--t-caption);
+  font-weight: 500;
+  padding: 4px 2px;
+  transition: color var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+
+.av-sec-action:hover {
+  color: var(--text-primary);
+}
+
+.av-sec-action:active {
+  transform: scale(0.97);
+}
+
+/* ============================================================
+   Header
+   ============================================================ */
+.av-header {
+  padding-top: 56px;
+}
+
+.av-statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  color: var(--text-primary);
+}
+
+.av-statusbar-time {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.av-statusbar-icons {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  opacity: 0.85;
+}
+
+.av-header-main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-2);
+}
+
+.av-greeting {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: var(--t-hero);
+  line-height: 0.92;
+  letter-spacing: -0.5px;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.av-greeting span {
+  display: block;
+}
+
+.av-greeting-comma {
+  opacity: 0.82;
+}
+
+.av-header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 22px;
+  padding-top: 6px;
+}
+
+.av-date {
+  margin-top: 26px;
+  font-size: var(--t-caption);
+  font-weight: 500;
+  letter-spacing: 1.4px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   Avatar
+   ============================================================ */
+.av-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.65);
+  background: linear-gradient(150deg, rgba(245, 213, 203, 0.9), rgba(220, 207, 233, 0.9));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.av-avatar span {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 500;
+  color: #4a3b38;
+  line-height: 1;
+}
+
+/* ============================================================
+   WeatherWidget
+   ============================================================ */
+.av-weather {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  color: var(--text-primary);
+}
+
+.av-weather-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.av-weather-temp {
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.av-weather-desc {
+  font-size: var(--t-small);
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+/* ============================================================
+   QuickTaskInput
+   ============================================================ */
+.av-quickadd {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 62px;
+  padding: 0 14px;
+  border-radius: var(--r-input);
+  background: var(--glass-bg-bar);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-soft);
+  cursor: text;
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+
+.av-quickadd:hover {
+  background: rgba(80, 80, 80, 0.24);
+}
+
+.av-quickadd:active {
+  transform: scale(0.99);
+}
+
+.av-quickadd-fab {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: var(--rosa);
+  color: #4a3b38;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  box-shadow: 0 4px 14px rgba(245, 213, 203, 0.3);
+}
+
+.av-quickadd-fab:hover {
+  transform: scale(1.06);
+  box-shadow: 0 6px 18px rgba(245, 213, 203, 0.4);
+}
+
+.av-quickadd-fab:active {
+  transform: scale(0.96);
+}
+
+.av-quickadd-placeholder {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  letter-spacing: 0.2px;
+}
+
+/* ============================================================
+   Timeline (Tarjeta Hoy)
+   ============================================================ */
+.av-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.av-tl-item {
+  display: grid;
+  grid-template-columns: 38px 1fr auto;
+  column-gap: 14px;
+  align-items: stretch;
+}
+
+.av-tl-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.av-tl-node {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--node-color, var(--rosa));
+  color: #3c322f;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.av-tl-line {
+  width: 1.5px;
+  flex: 1 1 auto;
+  background: linear-gradient(to bottom, var(--hairline), transparent);
+  margin-top: 6px;
+  min-height: 16px;
+}
+
+.av-tl-item:last-child .av-tl-line {
+  display: none;
+}
+
+.av-tl-body {
+  padding-bottom: 24px;
+  min-width: 0;
+}
+
+.av-tl-item:last-child .av-tl-body {
+  padding-bottom: 0;
+}
+
+.av-tl-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 1px 0 3px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.av-tl-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.av-tl-time {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding-top: 2px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.av-empty {
+  font-size: 14px;
+  color: var(--text-disabled);
+  padding: 6px 0 2px;
+}
+
+/* ============================================================
+   RoutineItem
+   ============================================================ */
+.av-routines {
+  display: flex;
+  flex-direction: column;
+}
+
+.av-routine {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.av-routine:first-child {
+  padding-top: 2px;
+}
+
+.av-routine:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.av-routine-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: var(--routine-color, var(--lavanda));
+  color: #3c322f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.av-routine-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.av-routine-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.av-routine-sub {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 3px 0 0;
+}
+
+.av-routine-time {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================
+   UrgentCard
+   ============================================================ */
+.av-urgent {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.av-urgent-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--rosa);
+  color: #4a3b38;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(245, 213, 203, 0.28);
+}
+
+.av-urgent-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.av-urgent-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin: 0 0 6px;
+}
+
+.av-urgent-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 3px;
+  line-height: 1.2;
+}
+
+.av-urgent-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ============================================================
+   FreeTimeBar
+   ============================================================ */
+.av-free-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.av-free-title {
+  font-family: var(--font-display);
+  font-size: var(--t-h3);
+  font-weight: 500;
+  margin: 0;
+  line-height: 1;
+}
+
+.av-free-range {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.av-free-track {
+  width: 100%;
+  height: 10px;
+  border-radius: 6px;
+  background: var(--track-bg);
+  overflow: hidden;
+}
+
+.av-free-fill {
+  height: 100%;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--rosa), rgba(245, 213, 203, 0.65));
+  box-shadow: 0 0 14px rgba(245, 213, 203, 0.35);
+  transition: width 600ms var(--ease);
+}
+
+.av-free-caption {
+  font-size: 12px;
+  color: var(--text-disabled);
+  margin: 12px 0 0;
+}
+
+/* ============================================================
+   Iconos
+   ============================================================ */
+.av-icon {
+  display: inline-block;
+  vertical-align: middle;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ============================================================
+   ThemeToggle
+   ============================================================ */
+.av-theme-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-primary);
+  background: var(--glass-bg-bar);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-soft);
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+
+.av-theme-toggle:hover {
+  transform: scale(1.06);
+}
+
+.av-theme-toggle:active {
+  transform: scale(0.94);
+}
+
+.av-theme-toggle .av-icon {
+  animation: avThemePop 360ms var(--ease);
+}
+
+@keyframes avThemePop {
+  from {
+    opacity: 0;
+    transform: rotate(-30deg) scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+  }
+}
+
+/* Variante compacta para la barra de estado del Home */
+.av-theme-toggle--mini {
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  opacity: 0.85;
+}
+
+.av-theme-toggle--mini:hover {
+  opacity: 1;
+}
+
+/* ============================================================
+   WelcomeScreen
+   ============================================================ */
+.av-welcome {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--welcome-bg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--text-primary);
+}
+
+/* Halo cálido de amanecer en la parte superior (la "luz" de Lumia).
+   Se mantiene por encima del logo para no revelar el fondo del PNG. */
+.av-welcome::before {
+  content: '';
+  position: absolute;
+  top: -8%;
+  left: 50%;
+  width: 360px;
+  height: 360px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, var(--brand-glow) 0%, transparent 60%);
+  filter: blur(14px);
+  opacity: 0.8;
+  pointer-events: none;
+  animation: avGlow 6s ease-in-out infinite alternate;
+}
+
+@keyframes avGlow {
+  from {
+    opacity: 0.55;
+    transform: translateX(-50%) scale(0.95);
+  }
+  to {
+    opacity: 0.9;
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+
+.av-welcome-top {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  padding: calc(env(safe-area-inset-top, 0px) + 24px) 24px 0;
+}
+
+.av-welcome-body {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 32px;
+  gap: 26px;
+}
+
+.av-welcome-logo {
+  width: min(76vw, 320px);
+  height: auto;
+  animation: avRise 720ms var(--ease) both;
+}
+
+.av-welcome-tagline {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: 26px;
+  line-height: 1.3;
+  letter-spacing: 0.3px;
+  color: var(--text-secondary);
+  max-width: 320px;
+  margin: 0;
+  animation: avRise 720ms var(--ease) 120ms both;
+}
+
+.av-welcome-foot {
+  position: relative;
+  z-index: 2;
+  padding: 0 32px calc(env(safe-area-inset-bottom, 0px) + 48px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  animation: avRise 720ms var(--ease) 240ms both;
+}
+
+.av-cta {
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: #4a3b38;
+  background: var(--rosa);
+  padding: 17px 0;
+  width: 100%;
+  max-width: 360px;
+  border-radius: var(--r-btn);
+  box-shadow: 0 10px 26px rgba(245, 213, 203, 0.35);
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+
+.av-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(245, 213, 203, 0.45);
+}
+
+.av-cta:active {
+  transform: scale(0.98);
+}
+
+.av-welcome-hint {
+  font-size: 13px;
+  color: var(--text-disabled);
+  margin: 0;
+}
