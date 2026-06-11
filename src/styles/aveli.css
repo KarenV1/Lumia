@@ -733,19 +733,22 @@
   height: auto;
   animation: avRise 720ms var(--ease) both;
   /* Desvanece los bordes del PNG para que el fondo horneado se funda con la
-     luz del fondo (sin línea rectangular). El contenido queda intacto. */
+     luz del fondo (sin línea rectangular). El contenido (sol + "LUMIA") está
+     muy dentro del margen, así que no se recorta. */
   -webkit-mask-image: linear-gradient(
       to right,
       transparent 0,
-      #000 10%,
-      #000 90%,
+      #000 14%,
+      #000 86%,
       transparent 100%
     ),
-    linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%);
+    linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%);
   -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(to right, transparent 0, #000 10%, #000 90%, transparent 100%),
-    linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%);
+  -webkit-mask-repeat: no-repeat;
+  mask-image: linear-gradient(to right, transparent 0, #000 14%, #000 86%, transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%);
   mask-composite: intersect;
+  mask-repeat: no-repeat;
 }
 
 .av-welcome-tagline {
