@@ -20,6 +20,6 @@ export const TodayCard = ({ tasks, onOpenCalendar }: TodayCardProps) => (
       actionLabel="Ver agenda"
       onAction={onOpenCalendar}
     />
-    <Timeline tasks={tasks.slice(0, 3)} />
+    <Timeline tasks={tasks} />
   </GlassCard>
 );

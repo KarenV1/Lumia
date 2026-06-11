@@ -149,22 +149,9 @@
 .av-statusbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 40px;
+  justify-content: flex-end;
+  margin-bottom: 32px;
   color: var(--text-primary);
-}
-
-.av-statusbar-time {
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-}
-
-.av-statusbar-icons {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  opacity: 0.85;
 }
 
 .av-header-main {
@@ -321,6 +308,101 @@
   font-weight: 400;
   color: var(--text-secondary);
   letter-spacing: 0.2px;
+}
+
+/* Panel de captura rápida (expandido) */
+.av-quickform {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  animation: avAuthIn 300ms var(--ease);
+}
+
+.av-quickform-title {
+  height: 54px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.av-quickform-row {
+  display: flex;
+  gap: 10px;
+}
+
+.av-quickfield {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.av-quickfield-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  padding-left: 4px;
+}
+
+.av-input--mini {
+  height: 48px;
+  font-size: 14px;
+  padding: 0 14px;
+}
+
+.av-quickform-urgency {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.av-urg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg-bar);
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease),
+    background var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+
+.av-urg-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--urg-color);
+}
+
+.av-urg.is-selected {
+  color: var(--text-primary);
+  border-color: var(--urg-color);
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 0 0 1px var(--urg-color);
+}
+
+.av-quickform-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.av-quickform-actions .av-btn-primary,
+.av-quickform-actions .av-btn-ghost {
+  flex: 1;
+  max-width: none;
+  min-height: 50px;
+  font-size: 15px;
 }
 
 /* ============================================================

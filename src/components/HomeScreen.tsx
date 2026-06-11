@@ -15,7 +15,7 @@ interface HomeScreenProps {
   theme: Theme;
   onToggleTheme: () => void;
   onOpenCalendar: () => void;
-  onQuickAdd?: () => void;
+  onAddTask: (task: Task) => void;
   onEditRoutines?: () => void;
 }
 
@@ -29,13 +29,15 @@ export const HomeScreen = ({
   theme,
   onToggleTheme,
   onOpenCalendar,
-  onQuickAdd,
+  onAddTask,
   onEditRoutines,
 }: HomeScreenProps) => {
   const today = timeHelper.getDateString();
   const dayOfWeek = timeHelper.getDayOfWeek(today);
 
-  const todayTasks = tasks.filter((t) => t.date === today && t.status !== 'completada');
+  const todayTasks = tasks
+    .filter((t) => t.date === today && t.status !== 'completada')
+    .sort((a, b) => timeHelper.timeToMinutes(a.startTime) - timeHelper.timeToMinutes(b.startTime));
   const todayRoutines = routines.filter((r) => r.active && r.daysOfWeek.includes(dayOfWeek));
 
   const tomorrow = timeHelper.getDateString(new Date(Date.now() + 24 * 60 * 60 * 1000));
@@ -54,7 +56,7 @@ export const HomeScreen = ({
         onToggleTheme={onToggleTheme}
       />
 
-      <QuickTaskInput onAdd={onQuickAdd} />
+      <QuickTaskInput onAdd={onAddTask} />
 
       <TodayCard tasks={todayTasks} onOpenCalendar={onOpenCalendar} />
 

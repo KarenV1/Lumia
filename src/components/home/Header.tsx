@@ -1,7 +1,5 @@
-import { useClock } from '../../hooks/useClock.ts';
 import { Theme } from '../../hooks/useTheme.ts';
 import { formatHeaderDate } from '../../utils/dateHelper.ts';
-import { Icon } from '../ui/Icon.tsx';
 import { ThemeToggle } from '../ui/ThemeToggle.tsx';
 import { Avatar } from './Avatar.tsx';
 import { WeatherWidget } from './WeatherWidget.tsx';
@@ -14,24 +12,17 @@ interface HeaderProps {
 }
 
 /**
- * Cabecera de la pantalla: barra de estado (hora + tema + indicadores del
- * sistema), saludo editorial (elemento más grande), clima y fecha.
+ * Cabecera de la pantalla: cambio de tema discreto, saludo editorial (elemento
+ * más grande), clima y fecha.
  */
 export const Header = ({ name, weather, theme, onToggleTheme }: HeaderProps) => {
-  const time = useClock();
   const date = formatHeaderDate();
 
   return (
     <header className="av-header">
-      {/* Barra de estado */}
+      {/* Cambio de tema, discreto, arriba a la derecha */}
       <div className="av-statusbar">
-        <span className="av-statusbar-time">{time}</span>
-        <div className="av-statusbar-icons">
-          <ThemeToggle theme={theme} onToggle={onToggleTheme} mini />
-          <Icon name="signal" size={16} />
-          <Icon name="wifi" size={16} />
-          <Icon name="battery" size={18} />
-        </div>
+        <ThemeToggle theme={theme} onToggle={onToggleTheme} mini />
       </div>
 
       {/* Saludo + clima */}

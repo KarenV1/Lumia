@@ -69,6 +69,7 @@ export const Dashboard = ({
           theme={theme}
           onToggleTheme={onToggleTheme}
           onOpenCalendar={handleOpenCalendar}
+          onAddTask={onAddTask}
         />
 
         <CalendarOverlay

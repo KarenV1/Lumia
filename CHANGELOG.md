@@ -6,6 +6,10 @@ Registro de cambios de Lumia. El formato sigue, de forma ligera,
 ## [Sin publicar]
 
 ### Añadido
+- **Captura rápida funcional**: el botón "Añadir pendiente rápido" despliega un
+  panel glass para crear una tarea real con **título**, **día y hora** (su lugar
+  en el calendario) y **relevancia** (urgencia con colores pastel). La tarea se
+  persiste y aparece en _Hoy_ y en el calendario del día.
 - **Acceso (login / registro)** integrado en la pantalla de bienvenida como una
   tarjeta del lenguaje Lumia, con transición de altura, validación, mostrar/
   ocultar contraseña y enlace de "¿Olvidaste tu contraseña?".
@@ -31,12 +35,19 @@ Registro de cambios de Lumia. El formato sigue, de forma ligera,
   (`--r-card` 32 → 22px, `--r-input` 28 → 24px, `--r-btn` 24 → 20px).
 - Iconos outline añadidos: `mail`, `lock`, `user`, `eye`, `eye-off`,
   `chevron-left`, `sun`.
+- La tarjeta _Hoy_ ahora **ordena las tareas por hora** y muestra todas las del
+  día (antes se limitaba a 3).
+- **Barra superior simplificada**: se quitaron la hora y los iconos simulados de
+  señal, wifi y batería; arriba solo queda el cambio de tema, discreto.
 
 ### Corregido
 - **Borde visible del logo Lumia**: el fondo horneado del PNG mostraba un
   rectángulo contra la iluminación. Se desvanecen los bordes con una máscara
   (`mask-composite: intersect`) que conserva el halo y elimina la línea, en
   claro y oscuro.
+- **Fecha "hoy" con desfase de un día**: `getDateString` usaba UTC; ahora usa la
+  fecha local, así el día coincide en encabezado, _Hoy_, calendario y captura
+  rápida.
 
 ## [0.1.0] — Initial commit
 
