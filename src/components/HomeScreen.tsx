@@ -16,7 +16,9 @@ interface HomeScreenProps {
   onToggleTheme: () => void;
   onOpenCalendar: () => void;
   onAddTask: (task: Task) => void;
-  onEditRoutines?: () => void;
+  onNewRoutine: () => void;
+  onEditRoutine: (routine: Routine) => void;
+  onToggleRoutine: (routine: Routine) => void;
 }
 
 /**
@@ -30,15 +32,15 @@ export const HomeScreen = ({
   onToggleTheme,
   onOpenCalendar,
   onAddTask,
-  onEditRoutines,
+  onNewRoutine,
+  onEditRoutine,
+  onToggleRoutine,
 }: HomeScreenProps) => {
   const today = timeHelper.getDateString();
-  const dayOfWeek = timeHelper.getDayOfWeek(today);
 
   const todayTasks = tasks
     .filter((t) => t.date === today && t.status !== 'completada')
     .sort((a, b) => timeHelper.timeToMinutes(a.startTime) - timeHelper.timeToMinutes(b.startTime));
-  const todayRoutines = routines.filter((r) => r.active && r.daysOfWeek.includes(dayOfWeek));
 
   const tomorrow = timeHelper.getDateString(new Date(Date.now() + 24 * 60 * 60 * 1000));
   const urgentTask = tasks.find(
@@ -64,9 +66,12 @@ export const HomeScreen = ({
 
       <FreeTimeBar summary={freeSummary} />
 
-      {todayRoutines.length > 0 && (
-        <RoutinesCard routines={todayRoutines} onEdit={onEditRoutines} />
-      )}
+      <RoutinesCard
+        routines={routines}
+        onNew={onNewRoutine}
+        onEdit={onEditRoutine}
+        onToggle={onToggleRoutine}
+      />
     </div>
   );
 };

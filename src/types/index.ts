@@ -15,6 +15,19 @@ export interface Task {
   isRoutine?: boolean;
 }
 
+export type RoutineFrequencyType = 'daily' | 'weekly' | 'interval' | 'once';
+
+export interface RoutineFrequency {
+  type: RoutineFrequencyType;
+  /** weekly: días aplicables */
+  days?: DayOfWeek[];
+  /** interval: cada cuántos minutos (60, 180, 30, 20…) */
+  everyMinutes?: number;
+  /** interval: rango horario opcional, ej. "08:00"–"22:00" */
+  from?: string;
+  to?: string;
+}
+
 export interface Routine {
   id: string;
   name: string;
@@ -23,6 +36,10 @@ export interface Routine {
   daysOfWeek: DayOfWeek[];
   color: string;
   active: boolean;
+  /** Nombre del icono outline (ver Icon) */
+  icon?: string;
+  /** Frecuencia de la rutina. Si falta, se deriva de daysOfWeek (compatibilidad). */
+  frequency?: RoutineFrequency;
 }
 
 export interface TimeBlock {

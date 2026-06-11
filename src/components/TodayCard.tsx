@@ -14,12 +14,7 @@ interface TodayCardProps {
  */
 export const TodayCard = ({ tasks, onOpenCalendar }: TodayCardProps) => (
   <GlassCard>
-    <SectionHeader
-      title="Hoy"
-      count={tasks.length}
-      actionLabel="Ver agenda"
-      onAction={onOpenCalendar}
-    />
+    <SectionHeader title="Hoy" actionLabel="Calendario" onAction={onOpenCalendar} />
     <Timeline tasks={tasks} />
   </GlassCard>
 );
