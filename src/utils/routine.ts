@@ -1,4 +1,4 @@
-import { DayOfWeek, Routine, RoutineFrequency } from '../types/index.ts';
+import { DayOfWeek, Routine, RoutineFrequency, RoutineKind } from '../types/index.ts';
 import { timeHelper } from './timeHelper.ts';
 
 export const ALL_DAYS: DayOfWeek[] = [
@@ -43,9 +43,35 @@ export const routineAppliesOn = (routine: Routine, day: DayOfWeek): boolean => {
   }
 };
 
+/** Tipo efectivo de la rutina (infiere si falta: interval → reminder). */
+export const getRoutineKind = (routine: Routine): RoutineKind => {
+  if (routine.kind) return routine.kind;
+  return getFrequency(routine).type === 'interval' ? 'reminder' : 'fixed';
+};
+
+/** ¿Es un bloque que choca con otros? Solo las rutinas fijas bloquean. */
+export const isBlocking = (routine: Routine): boolean => getRoutineKind(routine) === 'fixed';
+
+/** ¿Consume tiempo real del día? (fija o flexible; los recordatorios no). */
+export const occupiesTime = (routine: Routine): boolean => {
+  const k = getRoutineKind(routine);
+  return k === 'fixed' || k === 'flexible';
+};
+
+export const KIND_LABEL: Record<RoutineKind, string> = {
+  fixed: 'Fija',
+  reminder: 'Recordatorio',
+  flexible: 'Flexible',
+};
+
 /** Texto de horario legible para mostrar en la tarjeta. */
 export const routineScheduleText = (routine: Routine): string => {
   const f = getFrequency(routine);
+  if (getRoutineKind(routine) === 'flexible') {
+    const dur = routine.duration ?? 30;
+    const durText = dur % 60 === 0 ? `${dur / 60} h` : `${dur} min`;
+    return `Flexible · ${durText}`;
+  }
   if (f.type === 'interval') {
     const every = f.everyMinutes ?? 60;
     const label =
@@ -92,6 +118,10 @@ export const createEmptyRoutine = (): Routine => ({
   active: true,
   icon: 'star',
   frequency: { type: 'daily' },
+  kind: 'fixed',
+  duration: 30,
+  description: '',
+  notification: { notificationEnabled: false },
 });
 
 /** Mantiene daysOfWeek sincronizado con la frecuencia (para la lógica existente). */

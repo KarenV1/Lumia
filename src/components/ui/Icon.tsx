@@ -35,7 +35,10 @@ export type IconName =
   | 'walk'
   | 'bell'
   | 'trash'
-  | 'pencil';
+  | 'pencil'
+  | 'music'
+  | 'tag'
+  | 'dot';
 
 interface IconProps {
   name: IconName;
@@ -190,6 +193,20 @@ const paths: Record<IconName, React.ReactNode> = {
       <path d="M14.5 6.5l3 3" />
     </>
   ),
+  music: (
+    <>
+      <path d="M9 18V6l10-2v12" />
+      <circle cx="6.5" cy="18" r="2.5" />
+      <circle cx="16.5" cy="16" r="2.5" />
+    </>
+  ),
+  tag: (
+    <>
+      <path d="M4 11.5V5a1 1 0 0 1 1-1h6.5L20 12.5 12.5 20Z" />
+      <circle cx="8" cy="8" r="1.4" fill="currentColor" stroke="none" />
+    </>
+  ),
+  dot: <circle cx="12" cy="12" r="4" fill="currentColor" stroke="none" />,
 };
 
 export const Icon = ({ name, size = 22, className = '', strokeWidth }: IconProps) => (

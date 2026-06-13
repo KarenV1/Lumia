@@ -96,6 +96,9 @@ export const Dashboard = ({
         <RoutineEditor
           routine={editingRoutine}
           isNew={isNewRoutine}
+          tasks={tasks}
+          routines={routines}
+          date={selectedDate}
           onClose={() => setEditingRoutine(null)}
           onSave={handleSaveRoutine}
           onDelete={handleDeleteRoutine}

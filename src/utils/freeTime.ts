@@ -1,9 +1,5 @@
 import { Task, Routine } from '../types/index.ts';
-import { timeHelper } from './timeHelper.ts';
-
-const DAY_START = 7 * 60; // 07:00
-const DAY_END = 23 * 60; // 23:00
-const WAKING_MINUTES = DAY_END - DAY_START;
+import { WAKING, getFreeBlocks, getOccupiedMinutes } from './agenda.ts';
 
 export interface FreeSummary {
   /** Minutos libres totales dentro de la franja despierta */
@@ -15,36 +11,20 @@ export interface FreeSummary {
 }
 
 /**
- * Resume el tiempo libre del día dentro de la franja 07:00–23:00.
- * Aveli existe para ayudar a visualizar cuánto tiempo libre hay.
+ * Resume el tiempo libre real del día. Los recordatorios (agua, etc.) NO
+ * reducen el tiempo libre; solo lo hacen las actividades que ocupan tiempo.
  */
 export const getFreeSummary = (tasks: Task[], routines: Routine[], date: string): FreeSummary => {
-  const blocks = timeHelper
-    .calculateFreeBlocks(tasks, routines, date)
-    .filter((b) => b.type === 'free');
+  const free = getFreeBlocks(tasks, routines, date);
+  const freeMinutes = WAKING - getOccupiedMinutes(tasks, routines, date);
 
-  let freeMinutes = 0;
-  let largest = { minutes: 0, start: '', end: '' };
+  let largest = free[0];
+  for (const b of free) if (b.minutes > (largest?.minutes ?? 0)) largest = b;
 
-  for (const b of blocks) {
-    const start = Math.max(DAY_START, timeHelper.timeToMinutes(b.startTime));
-    const end = Math.min(DAY_END, timeHelper.timeToMinutes(b.endTime));
-    const dur = end - start;
-    if (dur <= 0) continue;
-    freeMinutes += dur;
-    if (dur > largest.minutes) {
-      largest = {
-        minutes: dur,
-        start: timeHelper.minutesToTime(start),
-        end: timeHelper.minutesToTime(end),
-      };
-    }
-  }
+  const percent = Math.max(0, Math.min(100, Math.round((freeMinutes / WAKING) * 100)));
+  const largestRange = largest ? `${largest.startLabel} – ${largest.endLabel}` : null;
 
-  const percent = Math.max(0, Math.min(100, Math.round((freeMinutes / WAKING_MINUTES) * 100)));
-  const largestRange = largest.minutes > 0 ? `${largest.start} – ${largest.end}` : null;
-
-  return { freeMinutes, percent, largestRange };
+  return { freeMinutes: Math.max(0, freeMinutes), percent, largestRange };
 };
 
 /** Convierte minutos a un texto humano, ej. "5 h 30 min libres" */

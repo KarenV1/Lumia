@@ -1,20 +1,22 @@
-import { Task } from '../types/index.ts';
+import { Task, Routine } from '../types/index.ts';
 import { GlassCard } from './ui/GlassCard.tsx';
 import { SectionHeader } from './ui/SectionHeader.tsx';
-import { Timeline } from './home/Timeline.tsx';
+import { DayPanorama } from './home/DayPanorama.tsx';
 
 interface TodayCardProps {
   tasks: Task[];
+  routines: Routine[];
+  date: string;
   onOpenCalendar: () => void;
 }
 
 /**
- * Tarjeta "Hoy": encabezado + línea de tiempo con las actividades del día.
- * La acción "Ver agenda" abre la cápsula del calendario.
+ * Tarjeta "Hoy": panorama del día (bloques + espacios libres + hábitos).
+ * La acción "Calendario" abre la vista de calendario.
  */
-export const TodayCard = ({ tasks, onOpenCalendar }: TodayCardProps) => (
+export const TodayCard = ({ tasks, routines, date, onOpenCalendar }: TodayCardProps) => (
   <GlassCard>
     <SectionHeader title="Hoy" actionLabel="Calendario" onAction={onOpenCalendar} />
-    <Timeline tasks={tasks} />
+    <DayPanorama tasks={tasks} routines={routines} date={date} />
   </GlassCard>
 );

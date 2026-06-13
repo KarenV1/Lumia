@@ -1625,3 +1625,166 @@
 .av-btn-danger:hover {
   background: rgba(207, 143, 121, 0.2);
 }
+
+/* ============================================================
+   Panorama del día · espacios libres + hábitos
+   ============================================================ */
+.av-tl-item--free .av-tl-node--free {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px dashed var(--hairline);
+  background: transparent;
+  box-shadow: none;
+}
+
+.av-tl-free-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin: 3px 0 3px;
+}
+
+.av-tl-flex {
+  margin-left: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 1px 6px;
+  vertical-align: middle;
+}
+
+.av-reminders {
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--hairline);
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.av-reminders-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.av-rem-track {
+  display: grid;
+  grid-template-columns: 26px auto 1fr;
+  align-items: center;
+  gap: 10px;
+}
+
+.av-rem-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 9px;
+  background: var(--routine-color, var(--azul));
+  color: #3c322f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.av-rem-name {
+  font-size: 13px;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.av-rem-line {
+  position: relative;
+  height: 14px;
+  min-width: 40px;
+}
+
+.av-rem-line::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: var(--hairline);
+}
+
+.av-rem-dot {
+  position: absolute;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--routine-color, var(--rosa));
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 2px var(--glass-bg);
+}
+
+/* ============================================================
+   Editor de rutinas · tipo, ocupados, conflicto, notificaciones
+   ============================================================ */
+.av-hint {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.av-suggest {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.av-occupied {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.av-occupied-chip {
+  font-size: 11px;
+  color: var(--text-secondary);
+  background: var(--chip-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 4px 8px;
+}
+
+.av-conflict {
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: rgba(207, 143, 121, 0.12);
+  border: 1px solid rgba(207, 143, 121, 0.35);
+}
+
+.av-conflict-msg {
+  font-size: 13px;
+  color: #cf8f79;
+  margin: 0;
+  font-weight: 500;
+}
+
+.av-conflict-alt {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 6px 0 0;
+}
+
+.av-notif-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.av-notif-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-primary);
+}

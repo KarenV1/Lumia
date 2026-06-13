@@ -36,6 +36,7 @@ function App() {
         color: 'var(--lavanda)',
         active: true,
         icon: 'moon',
+        kind: 'fixed' as const,
         frequency: { type: 'daily' as const },
       },
       {
@@ -47,6 +48,7 @@ function App() {
         color: 'var(--azul)',
         active: true,
         icon: 'droplet',
+        kind: 'reminder' as const,
         frequency: { type: 'interval' as const, everyMinutes: 180, from: '08:00', to: '22:00' },
       },
       {
@@ -58,10 +60,24 @@ function App() {
         color: 'var(--beige)',
         active: true,
         icon: 'book',
+        kind: 'fixed' as const,
         frequency: {
           type: 'weekly' as const,
           days: ['lunes', 'martes', 'miércoles', 'jueves', 'viernes'] as const,
         },
+      },
+      {
+        id: '4',
+        name: 'Leer',
+        startTime: '20:00',
+        endTime: '20:30',
+        daysOfWeek: ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'] as const,
+        color: 'var(--verde)',
+        active: true,
+        icon: 'book',
+        kind: 'flexible' as const,
+        duration: 30,
+        frequency: { type: 'daily' as const },
       },
     ];
 

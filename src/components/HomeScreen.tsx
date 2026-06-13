@@ -38,10 +38,6 @@ export const HomeScreen = ({
 }: HomeScreenProps) => {
   const today = timeHelper.getDateString();
 
-  const todayTasks = tasks
-    .filter((t) => t.date === today && t.status !== 'completada')
-    .sort((a, b) => timeHelper.timeToMinutes(a.startTime) - timeHelper.timeToMinutes(b.startTime));
-
   const tomorrow = timeHelper.getDateString(new Date(Date.now() + 24 * 60 * 60 * 1000));
   const urgentTask = tasks.find(
     (t) => t.date === tomorrow && (t.urgency === 'alta' || t.urgency === 'urgente'),
@@ -60,7 +56,7 @@ export const HomeScreen = ({
 
       <QuickTaskInput onAdd={onAddTask} />
 
-      <TodayCard tasks={todayTasks} onOpenCalendar={onOpenCalendar} />
+      <TodayCard tasks={tasks} routines={routines} date={today} onOpenCalendar={onOpenCalendar} />
 
       {urgentTask && <UrgentCard task={urgentTask} />}
 
