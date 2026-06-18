@@ -6,6 +6,22 @@ Registro de cambios de Lumia. El formato sigue, de forma ligera,
 ## [Sin publicar]
 
 ### Añadido
+- **Panorama del día** (`DayPanorama`): línea de tiempo vertical que combina
+  bloques que ocupan tiempo, **espacios libres** suaves con su duración y una
+  franja de **hábitos** (recordatorios) como marcas distribuidas por hora.
+- **Tipos de rutina**: _fija_ (bloquea tiempo), _recordatorio_ (no bloquea, solo
+  marca) y _flexible_ (tiene duración y se sugiere en un hueco libre).
+- **Validación de traslapes** elegante: al crear/editar una rutina fija que se
+  cruza con otra, mensaje dentro del formulario + chips de horarios ocupados +
+  **siguiente espacio libre** sugerido; sin alertas del navegador.
+- **Sugerencia para rutinas flexibles**: "Cabe hoy de HH:MM a HH:MM".
+- **Tiempo libre realista**: los recordatorios (agua, etc.) ya no reducen el
+  tiempo disponible; solo cuentan las actividades que ocupan tiempo.
+- Iconos nuevos: **música**, etiqueta genérica y punto; etiqueta corta y
+  descripción para hábitos sin icono exacto.
+- Estructura de **notificaciones** (`notificationEnabled/Time/Message`) en tareas
+  y rutinas, con interruptor en el editor (preparado para Notification API).
+- Núcleo `utils/agenda.ts` (bloques, libres, recordatorios, traslapes, huecos).
 - **Rutinas editables** con bottom sheet glass (modal en desktop): crear, editar,
   eliminar y activar/desactivar. Cada rutina elige **nombre, icono, color y
   frecuencia**. Componente nuevo `RoutineEditor` + utilidades `utils/routine.ts`.
