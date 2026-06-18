@@ -1,10 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { authService, AuthUser, SignUpParams } from '../services/auth.ts';
 
-/**
- * Estado y acciones de autenticación. Apoyado en `authService`, así que la UI
- * no sabe (ni le importa) si detrás hay un mock o Supabase.
- */
 export const useAuth = () => {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(false);
@@ -13,13 +9,23 @@ export const useAuth = () => {
 
   useEffect(() => {
     let active = true;
+
     authService.getSession().then((session) => {
       if (!active) return;
       setUser(session);
       setReady(true);
     });
+
+    // Supabase: reaccionar a cambios de sesión (token refresh, confirmación de email…)
+    const unsub = authService.subscribe?.((u) => {
+      if (!active) return;
+      setUser(u);
+      setReady(true);
+    });
+
     return () => {
       active = false;
+      unsub?.();
     };
   }, []);
 

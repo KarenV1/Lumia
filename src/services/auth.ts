@@ -1,40 +1,13 @@
 /**
  * Capa de autenticación de Lumia.
  *
- * Hoy usa una implementación simulada (mock) con localStorage para construir y
- * probar la interfaz. La lógica de la app depende SOLO de la interfaz
- * `AuthService`, así que migrar a Supabase Authentication más adelante es
- * cambiar la implementación exportada como `authService` — sin tocar la UI.
- *
- * Ejemplo de migración futura (Supabase):
- *
- *   import { createClient } from '@supabase/supabase-js';
- *   const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
- *
- *   export const supabaseAuthService: AuthService = {
- *     async getSession() {
- *       const { data } = await supabase.auth.getSession();
- *       const u = data.session?.user;
- *       return u ? { id: u.id, email: u.email!, name: u.user_metadata?.name } : null;
- *     },
- *     async signInWithPassword(email, password) {
- *       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
- *       if (error) return { user: null, error: error.message };
- *       return { user: { id: data.user.id, email: data.user.email! }, error: null };
- *     },
- *     async signUp({ name, email, password }) {
- *       const { data, error } = await supabase.auth.signUp({ email, password, options: { data: { name } } });
- *       if (error) return { user: null, error: error.message };
- *       return { user: { id: data.user!.id, email, name }, error: null };
- *     },
- *     async signOut() { await supabase.auth.signOut(); },
- *     async resetPassword(email) {
- *       const { error } = await supabase.auth.resetPasswordForEmail(email);
- *       return { error: error?.message ?? null };
- *     },
- *   };
- *   export const authService = supabaseAuthService;
+ * La UI depende únicamente de la interfaz `AuthService`. El punto de integración
+ * es la última línea: cambia `mockAuthService` por `supabaseAuthService` cuando
+ * tengas las variables de entorno configuradas, o deja que el selector automático
+ * lo haga si `VITE_SUPABASE_URL` está definida.
  */
+
+import { supabase, hasSupabase } from '../lib/supabase.ts';
 
 export interface AuthUser {
   id: string;
@@ -59,17 +32,19 @@ export interface AuthService {
   signUp(params: SignUpParams): Promise<AuthResult>;
   signOut(): Promise<void>;
   resetPassword(email: string): Promise<{ error: string | null }>;
+  /** Suscripción a cambios de sesión (token refresh, confirmación de email, etc.) */
+  subscribe?: (callback: (user: AuthUser | null) => void) => () => void;
 }
 
-/* ------------------------------------------------------------------ */
-/* Implementación mock (provisional)                                   */
-/* ------------------------------------------------------------------ */
+/* ── Mock (localStorage) ──────────────────────────────────────── */
 
 const SESSION_KEY = 'lumia_session';
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 const newId = () =>
-  typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : String(Date.now());
+  typeof crypto !== 'undefined' && 'randomUUID' in crypto
+    ? crypto.randomUUID()
+    : String(Date.now());
 
 const readSession = (): AuthUser | null => {
   try {
@@ -90,7 +65,6 @@ export const mockAuthService: AuthService = {
     await wait(150);
     return readSession();
   },
-
   async signInWithPassword(email, password) {
     await wait(650);
     if (!email || !password) return { user: null, error: 'Introduce tu correo y contraseña.' };
@@ -99,7 +73,6 @@ export const mockAuthService: AuthService = {
     writeSession(user);
     return { user, error: null };
   },
-
   async signUp({ name, email, password }) {
     await wait(750);
     if (!name || !email || !password) return { user: null, error: 'Completa todos los campos.' };
@@ -110,12 +83,10 @@ export const mockAuthService: AuthService = {
     writeSession(user);
     return { user, error: null };
   },
-
   async signOut() {
     await wait(150);
     writeSession(null);
   },
-
   async resetPassword(email) {
     await wait(500);
     if (!email || !isEmail(email)) return { error: 'Introduce un correo válido.' };
@@ -123,5 +94,52 @@ export const mockAuthService: AuthService = {
   },
 };
 
-/** Punto único de integración. Cambia esto por `supabaseAuthService` al migrar. */
-export const authService: AuthService = mockAuthService;
+/* ── Supabase ─────────────────────────────────────────────────── */
+
+const toAuthUser = (u: { id: string; email?: string | null; user_metadata?: Record<string, unknown> }): AuthUser => ({
+  id: u.id,
+  email: u.email ?? '',
+  name: u.user_metadata?.name as string | undefined,
+});
+
+export const supabaseAuthService: AuthService = {
+  async getSession() {
+    const { data } = await supabase.auth.getSession();
+    const u = data.session?.user;
+    return u ? toAuthUser(u) : null;
+  },
+  async signInWithPassword(email, password) {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) return { user: null, error: error.message };
+    return { user: toAuthUser(data.user), error: null };
+  },
+  async signUp({ name, email, password }) {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { name } },
+    });
+    if (error) return { user: null, error: error.message };
+    if (!data.user) return { user: null, error: 'No se pudo crear la cuenta.' };
+    return { user: toAuthUser(data.user), error: null };
+  },
+  async signOut() {
+    await supabase.auth.signOut();
+  },
+  async resetPassword(email) {
+    const { error } = await supabase.auth.resetPasswordForEmail(email);
+    return { error: error?.message ?? null };
+  },
+  subscribe(callback) {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_, session) => {
+      callback(session?.user ? toAuthUser(session.user) : null);
+    });
+    return () => subscription.unsubscribe();
+  },
+};
+
+/* ── Punto de integración ─────────────────────────────────────── */
+
+export const authService: AuthService = hasSupabase ? supabaseAuthService : mockAuthService;
