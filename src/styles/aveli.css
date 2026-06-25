@@ -10,7 +10,7 @@
   padding: 0 var(--s-3) calc(var(--s-3) + 72px);
   display: flex;
   flex-direction: column;
-  gap: 26px;
+  gap: 16px;
 }
 
 /* Entrada en cascada: fade + slide up + blur */
@@ -451,14 +451,39 @@
   background: var(--node-color, var(--rosa));
   color: #3c322f;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  opacity: 0.45;
+  transition: opacity var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+
+/* Nodo ya alcanzado por el avance del día */
+.av-tl-left.is-reached .av-tl-node {
+  opacity: 1;
+}
+
+/* Nodo en curso ahora mismo: anillo suave de presencia */
+.av-tl-left.is-current .av-tl-node {
+  box-shadow: 0 0 0 4px rgba(245, 213, 203, 0.3), 0 2px 10px rgba(0, 0, 0, 0.14);
 }
 
 .av-tl-line {
-  width: 1.5px;
+  position: relative;
+  width: 2px;
   flex: 1 1 auto;
-  background: linear-gradient(to bottom, var(--hairline), transparent);
+  background: var(--hairline);
+  border-radius: 2px;
   margin-top: 6px;
   min-height: 16px;
+  overflow: hidden;
+}
+
+/* Relleno que avanza con el día */
+.av-tl-line-fill {
+  position: absolute;
+  inset: 0 0 auto 0;
+  width: 100%;
+  background: linear-gradient(to bottom, var(--rosa), rgba(245, 213, 203, 0.45));
+  border-radius: 2px;
+  transition: height 600ms var(--ease);
 }
 
 .av-tl-item:last-child .av-tl-line {
@@ -1269,11 +1294,11 @@
   .av-home {
     padding-left: 18px;
     padding-right: 18px;
-    gap: 22px;
+    gap: 14px;
   }
 
   .av-card {
-    padding: 24px;
+    padding: 22px;
   }
 
   .av-auth {
