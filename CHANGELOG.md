@@ -6,6 +6,13 @@ Registro de cambios de Lumia. El formato sigue, de forma ligera,
 ## [Sin publicar]
 
 ### Añadido
+- **Línea de progreso del día** en el panorama: la línea vertical se llena
+  conforme avanza la hora, mostrando el recorrido de las tareas. Los nodos ya
+  pasados quedan a plena opacidad, el bloque en curso lleva un anillo suave y
+  los pendientes se atenúan. Se actualiza cada minuto.
+- **Persistencia en la nube (Supabase)**: autenticación real y base de datos por
+  usuario con Row Level Security; `services/database.ts` con CRUD de tareas y
+  rutinas. Fallback automático a localStorage si no hay variables de entorno.
 - **Panorama del día** (`DayPanorama`): línea de tiempo vertical que combina
   bloques que ocupan tiempo, **espacios libres** suaves con su duración y una
   franja de **hábitos** (recordatorios) como marcas distribuidas por hora.
@@ -50,6 +57,8 @@ Registro de cambios de Lumia. El formato sigue, de forma ligera,
 - **Pantalla de bienvenida** de marca con el logo Lumia (`BrandLogo`).
 
 ### Cambiado
+- **Tarjetas menos redondeadas** y más compactas: `--r-card`/`--r-input` 22/24 →
+  16px, `--r-btn` 20 → 14px; menor separación entre tarjetas (gap 26 → 16px).
 - Nuevo flujo de entrada: _Welcome → Comenzar despliega el acceso → al
   autenticarse entra a la app_. Un usuario con sesión entra directo al Home.
 - El acceso dejó de estar al pie del Home y ahora vive en la bienvenida.

@@ -33,9 +33,9 @@
   --gris: #d8d8d8;
 
   /* Radios */
-  --r-input: 24px;
-  --r-card: 22px;
-  --r-btn: 20px;
+  --r-input: 16px;
+  --r-card: 16px;
+  --r-btn: 14px;
 
   /* Sombra */
   --shadow-soft: 0 12px 30px rgba(0, 0, 0, 0.1);
